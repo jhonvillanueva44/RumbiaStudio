@@ -1,0 +1,375 @@
+
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RUMBIA · Videollamadas con universitarios</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="recomendados.css" />
+  <link rel="icon" href="data:," />
+  <meta name="description" content="Plataforma educativa para orientación vocacional con universitarios por videollamada. Reserva tu sesión y resuelve tus dudas de carrera.">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-logo" aria-hidden="true">🎓</span>
+        <span class="brand-text">RUMBIA</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#beneficios">Beneficios</a>
+        <a href="#valor">Mapa de valor</a>
+        <a href="#comunidad">Comunidad</a>
+        <a href="login.html"><button class="btn btn-primary">Inicia Sesion</button></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Orientación vocacional por <span class="grad">videollamada</span></h1>
+          <p class="lead">
+            Estudiantes de educación superior guían a adolescentes y jóvenes (12–27 años) de Perú e internacional.
+            Aclara tus dudas y elige con seguridad tu camino.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="btnAbrirReserva2">Reservar sesión</button>
+            <a class="btn btn-ghost" href="#valor">Ver mapa de valor</a>
+          </div>
+          <ul class="quick-tags">
+            <li>Perú</li><li>Freemium</li><li>Síncrono</li><li>Accesible</li>
+          </ul>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="video-mock">
+            <div class="video-topbar">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+            <div class="video-body">
+              <div class="video-main">Tu mentor</div>
+              <div class="video-side">
+                <div class="pill">Consejos reales</div>
+                <div class="pill">Experiencia cercana</div>
+                <div class="pill">Decide con seguridad</div>
+              </div>
+            </div>
+            <div class="video-toolbar">
+              <button title="Silenciar">🔇</button>
+              <button class="danger" title="Colgar">⏹</button>
+              <button title="Compartir pantalla">🖥️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+      <!-- Escoge tu mentor -->
+      <section class="mentores container">
+        <h2>Charlas Recomendadas</h2>
+        
+        <div class="carousel-container">
+          <button class="carousel-arrow left" id="arrowLeft">←</button>
+
+          <div class="carousel-track" id="carouselTrack">
+
+            <!-- Card 1 -->
+            <article class="mentor-card">
+              <div class="card-img">
+                <img src="igsistemas.jpeg" alt="Andrea · Ingeniería">
+              </div>
+              <div class="card-body">
+                <div class="top-info">
+                  <h3>Explora Ingeniería de Sistemas</h3>
+                  <span class="price">S/20</span>
+                </div>
+                <p class="mentor-area">12/10/2025 · Inscripción hasta 10/10</p>
+                <p>Conoce herramientas, cursos clave y lo que no te cuentan de la carrera.</p>
+                <a href="mentor1.html" class="btn-card">Inscribirme</a>
+              </div>
+              <div class="mentor-footer">
+                <img src="mentor1.jpeg" class="avatar" alt="Andrea">
+                <span class="username">@andrea_tech</span>
+              </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="mentor-card">
+              <div class="card-img">
+                <img src="medicina.jpeg" alt="Carlos · Innovación">
+              </div>
+              <div class="card-body">
+                <div class="top-info">
+                  <h3>Innovación y salud pública</h3>
+                  <span class="price">S/15</span>
+                </div>
+                <p class="mentor-area">15/10/2025 · Inscripción hasta 13/10</p>
+                <p>Oportunidades reales para jóvenes en carreras de salud e innovación.</p>
+                <a href="mentor2.html" class="btn-card">Inscribirme</a>
+              </div>
+              <div class="mentor-footer">
+                <img src="mentor2.jpg" class="avatar" alt="Carlos">
+                <span class="username">@carlos_med</span>
+              </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="mentor-card">
+              <div class="card-img">
+                <img src="psicologia.jpeg" alt="Ruben · Tecnología">
+              </div>
+              <div class="card-body">
+                <div class="top-info">
+                  <h3>Productividad universitaria</h3>
+                  <span class="price">S/15</span>
+                </div>
+                <p class="mentor-area">18/10/2025 · Inscripción hasta 16/10</p>
+                <p>Descubre apps, hábitos y herramientas que te salvan el ciclo.</p>
+                <a href="mentor3.html" class="btn-card">Inscribirme</a>
+              </div>
+              <div class="mentor-footer">
+                <img src="mentor3.jpeg" class="avatar" alt="Ruben">
+                <span class="username">@ruben.tech</span>
+              </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="mentor-card">
+              <div class="card-img">
+                <img src="medicina.jpeg" alt="Carlos · Innovación">
+              </div>
+              <div class="card-body">
+                <div class="top-info">
+                  <h3>Innovación y salud pública</h3>
+                  <span class="price">S/15</span>
+                </div>
+                <p class="mentor-area">15/10/2025 · Inscripción hasta 13/10</p>
+                <p>Oportunidades reales para jóvenes en carreras de salud e innovación.</p>
+                <a href="mentor2.html" class="btn-card">Inscribirme</a>
+              </div>
+              <div class="mentor-footer">
+                <img src="mentor2.jpg" class="avatar" alt="Carlos">
+                <span class="username">@carlos_med</span>
+              </div>
+            </article>
+
+            <!-- Card 5 -->
+            <article class="mentor-card">
+              <div class="card-img">
+                <img src="igsistemas.jpeg" alt="Andrea · Ingeniería">
+              </div>
+              <div class="card-body">
+                <div class="top-info">
+                  <h3>Explora Ingeniería de Sistemas</h3>
+                  <span class="price">S/20</span>
+                </div>
+                <p class="mentor-area">12/10/2025 · Inscripción hasta 10/10</p>
+                <p>Conoce herramientas, cursos clave y lo que no te cuentan de la carrera.</p>
+                <a href="mentor1.html" class="btn-card">Inscribirme</a>
+              </div>
+              <div class="mentor-footer">
+                <img src="mentor1.jpeg" class="avatar" alt="Andrea">
+                <span class="username">@andrea_tech</span>
+              </div>
+            </article>
+
+          </div>
+
+          <button class="carousel-arrow right" id="arrowRight">→</button>
+        </div>
+      </section>
+
+      <script>
+        const track = document.getElementById('carouselTrack');
+        const btnLeft = document.getElementById('arrowLeft');
+        const btnRight = document.getElementById('arrowRight');
+
+        btnLeft.addEventListener('click', () => {
+          track.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+
+        btnRight.addEventListener('click', () => {
+          track.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+      </script>
+
+
+<br>
+<br>
+
+    <!-- Mapa de valor -->
+    <section id="valor" class="valor">
+      <div class="container">
+        <h2>Mapa de valor</h2>
+        <div class="grid-3">
+          <div class="stack">
+            <ul class="list-ranked">
+              <li><span class="badge badge-essential">Esencial</span> Plataforma web con videollamadas en tiempo real.</li>
+              <li><span class="badge badge-essential">Esencial</span> Acceso a universitarios que comparten su experiencia.</li>
+              <li><span class="badge">Importante</span> Agenda en línea para reservar sesiones.</li>
+              <li><span class="badge">Importante</span> Biblioteca digital con recursos y guías.</li>
+              <li><span class="badge badge-nice">Agradable</span> Foro/comunidad para dudas rápidas.</li>
+              <li><span class="badge badge-nice">Agradable</span> Noticias de becas, ferias y universidades.</li>
+            </ul>
+          </div>
+          <div class="stack">
+            <ul class="list-ranked">
+              <li><span class="badge badge-essential">Esencial</span> Videollamadas personalizadas que reducen la incertidumbre.</li>
+              <li><span class="badge badge-essential">Esencial</span> Información verificada y confiable.</li>
+              <li><span class="badge">Importante</span> Asesoría cercana y motivacional.</li>
+              <li><span class="badge">Importante</span> Precios accesibles / freemium.</li>
+              <li><span class="badge badge-nice">Agradable</span> Interfaz intuitiva y atractiva.</li>
+            </ul>
+          </div>
+          <div class="stack">
+            <ul class="list-ranked">
+              <li><span class="badge badge-essential">Esencial</span> Orientación clara para decidir con seguridad.</li>
+              <li><span class="badge">Importante</span> Experiencias inspiradoras de universitarios.</li>
+              <li><span class="badge">Importante</span> Ahorro de tiempo centralizando información.</li>
+              <li><span class="badge badge-nice">Agradable</span> Conexión con una comunidad afín.</li>
+              <li><span class="badge badge-nice">Agradable</span> Gamificación: logros, insignias, retos.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Beneficios -->
+    <section id="beneficios" class="container beneficios">
+      <h2>¿Por qué usar Rumbía?</h2>
+      <div class="cards">
+        <article class="card card-icon">
+          <div class="i">💬</div>
+          <h3>Conversaciones reales</h3>
+          <p>Habla con quien ya está en la carrera que te interesa.</p>
+        </article>
+        <article class="card card-icon">
+          <div class="i">📚</div>
+          <h3>Recursos prácticos</h3>
+          <p>Guías, rutas y comparativas para decidir mejor.</p>
+        </article>
+        <article class="card card-icon">
+          <div class="i">⏱️</div>
+          <h3>Reserva en minutos</h3>
+          <p>Agenda en línea y recordatorios automáticos.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Agenda / Reserva -->
+<section class="agenda">
+  <div class="container agenda-grid">
+    <div>
+      <h2>Reserva tu sesión</h2>
+      <p>Selecciona área de interés y un horario disponible.</p>
+      <form id="formReserva" class="form">
+        <label>
+          Área de interés
+          <select name="area" required>
+            <option value="">Selecciona…</option>
+            <option>Ingenierías</option>
+            <option>Salud</option>
+            <option>Negocios</option>
+            <option>Artes & Diseño</option>
+            <option>Ciencias Sociales</option>
+            <option>Tecnología</option>
+          </select>
+        </label>
+        <label>
+          Fecha
+          <input type="date" name="fecha" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="tucorreo@ejemplo.com" required />
+        </label>
+        <button class="btn btn-primary" type="submit">Confirmar reserva</button>
+      </form>
+    </div>
+
+    <div class="slots" style="padding: 0; margin: 0;">
+      <img
+        src="xd.jpg"
+        alt=""
+        style="width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 12px;" />
+    </div>
+  </div>
+</section>
+
+
+
+    <!-- Comunidad -->
+<section id="comunidad" class="comunidad-section container">
+  <h2 class="comunidad-title">Comunidad</h2>
+  <div class="comunidad-cards">
+    
+    <article class="comunidad-card">
+      <blockquote class="comunidad-quote">
+        “Gracias a la sesión entendí la diferencia entre Ing. de Sistemas e Ing. de Software.
+        Ahora sé qué cursos me esperan y qué me gusta más.”
+      </blockquote>
+      <div class="comunidad-avatar">
+        <span class="avatar-inicial">J</span>
+        <div class="avatar-info">
+          <strong>Joselyn (17)</strong>
+          <small>Secundaria · Trujillo</small>
+        </div>
+      </div>
+    </article>
+
+    <article class="comunidad-card">
+      <blockquote class="comunidad-quote">
+        “Me contaron la realidad de Medicina y opciones de becas. Fue directo y sin humo.”
+      </blockquote>
+      <div class="comunidad-avatar">
+        <span class="avatar-inicial">M</span>
+        <div class="avatar-info">
+          <strong>Matías (19)</strong>
+          <small>Preuniversitario · Lima</small>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+
+    <!-- CTA final -->
+    <section class="cta">
+      <div class="container cta-box">
+        <h2>¿Listo para elegir con seguridad?</h2>
+        <p>Agenda una videollamada y resuelve tus dudas con alguien que ya vive esa carrera.</p>
+        <button class="btn btn-light" id="btnAbrirReserva3">Agendar ahora</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container foot">
+      <small>© <span id="year"></span> RUMBIA  · Educación que acompaña decisiones.</small>
+      <nav class="foot-links">
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Modal de éxito -->
+  <dialog id="modalOk" class="modal">
+    <div class="modal-card">
+      <h3>¡Reserva recibida!</h3>
+      <p>Te enviaremos un correo con la confirmación y el enlace de la videollamada.</p>
+      <button class="btn btn-primary" id="btnCerrarModal">Aceptar</button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+    }
+
+    .split-left {
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .split-right {
+      background: url("https://assets.weforum.org/article/image/iyk4OFmjDo0rdGIZKScaL71elrKLCAFeaZbOI3wkQXI.jpeg") no-repeat center center;
+      background-size: cover;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    /* Logo arriba a la izquierda */
+    .brand {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .brand-logo {
+      font-size: 24px;
+      margin-right: 8px;
+    }
+
+    .brand-text {
+      font-size: 20px;
+
+      .register-link {
+        color: #0d6efd;
+        /* color azul Bootstrap */
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .register-link:hover {
+        text-decoration: underline;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+
+      <!-- Lado Izquierdo: Login más pequeño -->
+      <div class="col-md-4 split-left">
+
+        <!-- Logo fijo en esquina superior izquierda -->
+        <a class="brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true">🎓</span>
+          <span class="brand-text">RUMBIA</span>
+        </a>
+
+        <div class="login-box">
+          <h2 class="mb-4 text-center">Iniciar Sesión</h2>
+          <form>
+            <div class="mb-3">
+              <label for="username" class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="username" placeholder="Ingrese su usuario">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Iniciar Sesion</button>
+            <div class="text-center mt-3">
+              <a href="register.html" class="register-link">Registrate aqui!!</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Imagen más grande -->
+      <div class="col-md-8 split-right d-none d-md-block"></div>
+    </div>
+  </div>
+</body>
+
+</html>
