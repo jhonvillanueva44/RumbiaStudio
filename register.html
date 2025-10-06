@@ -27,7 +27,6 @@
       width: 100%;
       max-width: 320px;
     }
-    /* Logo arriba a la izquierda */
     .brand {
       position: absolute;
       top: 20px;
@@ -54,6 +53,9 @@
     .login-link:hover {
       text-decoration: underline;
     }
+    .alert {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -69,7 +71,7 @@
 
         <div class="register-box">
           <h2 class="mb-4 text-center">Registrarse</h2>
-          <form>
+          <form id="registerForm">
             <div class="mb-3">
               <label for="username" class="form-label">Nombre</label>
               <input type="text" class="form-control" id="username" placeholder="Ingrese su nombre" required />
@@ -80,7 +82,7 @@
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required />
+              <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required minlength="6" />
             </div>
             <div class="mb-3">
               <label for="confirm-password" class="form-label">Confirmar Contraseña</label>
@@ -91,6 +93,7 @@
               <a href="login.html" class="login-link">¿Ya tienes cuenta? Inicia sesión</a>
             </div>
           </form>
+          <div id="messageArea"></div>
         </div>
       </div>
 
@@ -98,5 +101,106 @@
       <div class="col-md-8 split-right d-none d-md-block"></div>
     </div>
   </div>
+
+  <script>
+    // Funciones para manejar usuarios en localStorage
+    function getUsers() {
+      const users = localStorage.getItem('rumbiaUsers');
+      return users ? JSON.parse(users) : [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('rumbiaUsers', JSON.stringify(users));
+    }
+
+    // Función para mostrar mensajes
+    function showMessage(message, type) {
+      const messageArea = document.getElementById('messageArea');
+      messageArea.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+    }
+
+    // Validar email
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    // Validar si el email ya existe
+    function emailExists(email) {
+      const users = getUsers();
+      return users.some(user => user.email.toLowerCase() === email.toLowerCase());
+    }
+
+    // Manejar el envío del formulario
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Validaciones
+      if (!username || !email || !password || !confirmPassword) {
+        showMessage('Por favor, complete todos los campos.', 'warning');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showMessage('Por favor, ingrese un correo electrónico válido.', 'warning');
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage('La contraseña debe tener al menos 6 caracteres.', 'warning');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage('Las contraseñas no coinciden.', 'danger');
+        return;
+      }
+
+      if (emailExists(email)) {
+        showMessage('Este correo electrónico ya está registrado.', 'danger');
+        return;
+      }
+
+      // Crear nuevo usuario
+      const newUser = {
+        id: Date.now(),
+        username: username,
+        email: email,
+        password: password,
+        registeredAt: new Date().toISOString()
+      };
+
+      // Obtener usuarios existentes y agregar el nuevo
+      const users = getUsers();
+      users.push(newUser);
+      saveUsers(users);
+
+      // Mostrar mensaje de éxito
+      showMessage(`¡Registro exitoso! Bienvenido, ${username}. Redirigiendo al login...`, 'success');
+
+      // Limpiar formulario
+      document.getElementById('registerForm').reset();
+
+      // Redirigir al login después de 2 segundos
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+
+      console.log('Usuario registrado:', newUser);
+      console.log('Usuarios totales:', users);
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!doctype html>
 <html lang="es">
 <head>
@@ -12,6 +10,74 @@
   <link rel="stylesheet" href="recomendados.css" />
   <link rel="icon" href="data:," />
   <meta name="description" content="Plataforma educativa para orientación vocacional con universitarios por videollamada. Reserva tu sesión y resuelve tus dudas de carrera.">
+  <style>
+    .user-menu {
+      position: relative;
+      display: inline-block;
+    }
+    .user-button {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .user-button:hover {
+      background: #e9ecef;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+    }
+    .dropdown-menu.show {
+      display: block;
+    }
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      color: #333;
+      display: block;
+      text-decoration: none;
+    }
+    .dropdown-item:hover {
+      background: #f8f9fa;
+    }
+    .dropdown-divider {
+      height: 1px;
+      background: #e9ecef;
+      margin: 0.5rem 0;
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -24,7 +90,11 @@
         <a href="#beneficios">Beneficios</a>
         <a href="#valor">Mapa de valor</a>
         <a href="#comunidad">Comunidad</a>
-        <a href="login.html"><button class="btn btn-primary">Inicia Sesion</button></a>
+        
+        <!-- Área dinámica: botón de login o menú de usuario -->
+        <div id="authArea">
+          <a href="login.html"><button class="btn btn-primary">Inicia Sesión</button></a>
+        </div>
       </nav>
     </div>
   </header>
@@ -185,21 +255,6 @@
         </div>
       </section>
 
-      <script>
-        const track = document.getElementById('carouselTrack');
-        const btnLeft = document.getElementById('arrowLeft');
-        const btnRight = document.getElementById('arrowRight');
-
-        btnLeft.addEventListener('click', () => {
-          track.scrollBy({ left: -300, behavior: 'smooth' });
-        });
-
-        btnRight.addEventListener('click', () => {
-          track.scrollBy({ left: 300, behavior: 'smooth' });
-        });
-      </script>
-
-
 <br>
 <br>
 
@@ -302,8 +357,6 @@
   </div>
 </section>
 
-
-
     <!-- Comunidad -->
 <section id="comunidad" class="comunidad-section container">
   <h2 class="comunidad-title">Comunidad</h2>
@@ -311,8 +364,8 @@
     
     <article class="comunidad-card">
       <blockquote class="comunidad-quote">
-        “Gracias a la sesión entendí la diferencia entre Ing. de Sistemas e Ing. de Software.
-        Ahora sé qué cursos me esperan y qué me gusta más.”
+        "Gracias a la sesión entendí la diferencia entre Ing. de Sistemas e Ing. de Software.
+        Ahora sé qué cursos me esperan y qué me gusta más."
       </blockquote>
       <div class="comunidad-avatar">
         <span class="avatar-inicial">J</span>
@@ -325,7 +378,7 @@
 
     <article class="comunidad-card">
       <blockquote class="comunidad-quote">
-        “Me contaron la realidad de Medicina y opciones de becas. Fue directo y sin humo.”
+        "Me contaron la realidad de Medicina y opciones de becas. Fue directo y sin humo."
       </blockquote>
       <div class="comunidad-avatar">
         <span class="avatar-inicial">M</span>
@@ -338,7 +391,6 @@
 
   </div>
 </section>
-
 
     <!-- CTA final -->
     <section class="cta">
@@ -370,6 +422,66 @@
     </div>
   </dialog>
 
+<script>
+  // Función para verificar sesión y cargar menú de usuario
+  function loadUserMenu() {
+    const authArea = document.getElementById('authArea');
+    const currentUser = sessionStorage.getItem('currentUser');
+
+    if (!currentUser) {
+      // Usuario no logueado → mostrar botón de inicio de sesión
+      authArea.innerHTML = `<a href="login.html"><button class="btn btn-primary">Inicia Sesión</button></a>`;
+      return;
+    }
+
+    const user = JSON.parse(currentUser);
+    const profilePic = localStorage.getItem(`profilePic_${user.email}`);
+    
+    // Si tiene foto, la usamos. Si no, la inicial.
+    const avatarContent = profilePic 
+      ? `<img src="${profilePic}" alt="${user.username}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
+      : user.username.charAt(0).toUpperCase();
+
+    // Menú de usuario
+    authArea.innerHTML = `
+      <div class="user-menu">
+        <button class="user-button" id="userMenuBtn">
+          <div class="user-avatar">${avatarContent}</div>
+          <span>${user.username}</span>
+        </button>
+        <div class="dropdown-menu" id="userDropdown">
+          <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" id="logoutBtn">Cerrar sesión</button>
+        </div>
+      </div>
+    `;
+
+    // Mostrar/Ocultar menú desplegable
+    const menuBtn = document.getElementById('userMenuBtn');
+    const dropdown = document.getElementById('userDropdown');
+
+    menuBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function() {
+      dropdown.classList.remove('show');
+    });
+
+    // Cerrar sesión
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      sessionStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    });
+  }
+
+  // Ejecutar cuando la página carga
+  window.addEventListener('DOMContentLoaded', loadUserMenu);
+</script>
+
+  
   <script src="app.js"></script>
 </body>
 </html>

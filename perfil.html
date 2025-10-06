@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi Perfil - RUMBIA</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .profile-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    
+    .profile-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      padding: 2rem;
+      color: white;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .profile-avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: white;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .profile-avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-upload-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .profile-avatar-large:hover .avatar-upload-overlay {
+      opacity: 1;
+    }
+
+    #avatarInput {
+      display: none;
+    }
+    
+    .profile-info h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2rem;
+    }
+    
+    .profile-info p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    
+    .profile-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .calendar-grid {
+        grid-template-columns: repeat(7, 1fr) !important;
+      }
+    }
+    
+    .meetings-section h2 {
+      margin: 0 0 1.5rem 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+    
+    .meeting-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+      border-left: 4px solid #667eea;
+      transition: transform 0.2s;
+    }
+    
+    .meeting-card:hover {
+      transform: translateX(4px);
+    }
+    
+    .meeting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+    
+    .meeting-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #333;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .meeting-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .meeting-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+    }
+    
+    .detail-icon {
+      font-size: 1.2rem;
+    }
+    
+    .meeting-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .btn-small {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .btn-join {
+      background: #28a745;
+      color: white;
+    }
+    
+    .btn-join:hover {
+      background: #218838;
+    }
+    
+    .btn-cancel {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-cancel:hover {
+      background: #c82333;
+    }
+    
+    .btn-reschedule {
+      background: #ffc107;
+      color: #333;
+    }
+    
+    .btn-reschedule:hover {
+      background: #e0a800;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .user-menu {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .user-button {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .user-button:hover {
+      background: #e9ecef;
+    }
+    
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      min-width: 200px;
+      display: none;
+      z-index: 1000;
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      color: #333;
+      display: block;
+      text-decoration: none;
+    }
+    
+    .dropdown-item:hover {
+      background: #f8f9fa;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: #e9ecef;
+      margin: 0.5rem 0;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #e9ecef;
+    }
+    
+    .tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #666;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+    
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    /* Calendario */
+    .calendar-container {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .calendar-header h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: #333;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .calendar-nav button {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .calendar-nav button:hover {
+      background: #e9ecef;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .calendar-weekday {
+      text-align: center;
+      font-weight: 600;
+      color: #666;
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .calendar-day:hover {
+      background: #f8f9fa;
+    }
+
+    .calendar-day.other-month {
+      color: #ccc;
+    }
+
+    .calendar-day.today {
+      background: #667eea;
+      color: white;
+      font-weight: bold;
+    }
+
+    .calendar-day.has-meeting {
+      background: #d4edda;
+      color: #155724;
+      font-weight: bold;
+    }
+
+    .calendar-day.has-meeting::after {
+      content: '•';
+      position: absolute;
+      bottom: 4px;
+      font-size: 1.5rem;
+      color: #28a745;
+    }
+
+    .meetings-list-compact {
+      margin-top: 1.5rem;
+    }
+
+    .meetings-list-compact h4 {
+      margin: 0 0 1rem 0;
+      color: #666;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .meeting-compact {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .meeting-compact-date {
+      background: #667eea;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      text-align: center;
+      min-width: 50px;
+    }
+
+    .meeting-compact-date .day {
+      font-size: 1.25rem;
+      font-weight: bold;
+      display: block;
+    }
+
+    .meeting-compact-date .month {
+      font-size: 0.75rem;
+      display: block;
+    }
+
+    .meeting-compact-info {
+      flex: 1;
+    }
+
+    .meeting-compact-info .title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+
+    .meeting-compact-info .time {
+      font-size: 0.85rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-logo" aria-hidden="true">🎓</span>
+        <span class="brand-text">RUMBIA</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html#beneficios">Beneficios</a>
+        <a href="index.html#valor">Mapa de valor</a>
+        <a href="index.html#comunidad">Comunidad</a>
+        
+        <div id="authArea">
+          <a href="login.html"><button class="btn btn-primary">Inicia Sesión</button></a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="profile-container">
+    <!-- Header del Perfil -->
+    <div class="profile-header">
+      <div class="profile-avatar-large" id="profileAvatarLarge">
+        U
+        <div class="avatar-upload-overlay">📷 Cambiar foto</div>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*">
+      <div class="profile-info">
+        <h1 id="profileName">Usuario</h1>
+        <p id="profileEmail">correo@ejemplo.com</p>
+        <div class="profile-stats">
+          <div class="stat-item">
+            <span class="stat-number" id="statMeetings">0</span>
+            <span class="stat-label">Reuniones</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number" id="statCompleted">0</span>
+            <span class="stat-label">Completadas</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">2025</span>
+            <span class="stat-label">Miembro desde</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="meetings">Mis Reuniones</button>
+      <button class="tab" data-tab="calendar">Calendario</button>
+    </div>
+
+    <!-- Contenido de Tabs -->
+    <div id="tabContent">
+      <!-- Tab: Reuniones -->
+      <div id="meetingsTab" class="tab-content">
+        <div class="meetings-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>Reuniones Programadas</h2>
+            <a href="index.html#agenda" class="btn btn-primary">+ Nueva Reunión</a>
+          </div>
+          
+          <div id="meetingsList">
+            <!-- Las reuniones se cargarán aquí -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Calendario -->
+      <div id="calendarTab" class="tab-content" style="display: none;">
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <h3 id="currentMonthYear">Enero 2025</h3>
+            <div class="calendar-nav">
+              <button id="prevMonth">← Anterior</button>
+              <button id="nextMonth">Siguiente →</button>
+            </div>
+          </div>
+
+          <div class="calendar-weekdays">
+            <div class="calendar-weekday">Dom</div>
+            <div class="calendar-weekday">Lun</div>
+            <div class="calendar-weekday">Mar</div>
+            <div class="calendar-weekday">Mié</div>
+            <div class="calendar-weekday">Jue</div>
+            <div class="calendar-weekday">Vie</div>
+            <div class="calendar-weekday">Sáb</div>
+          </div>
+
+          <div class="calendar-grid" id="calendarGrid">
+            <!-- Los días se generarán dinámicamente -->
+          </div>
+
+          <div class="meetings-list-compact">
+            <h4>Próximas Reuniones</h4>
+            <div id="upcomingMeetings">
+              <!-- Se mostrarán las próximas reuniones -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container foot">
+      <small>© <span id="year"></span> RUMBIA · Educación que acompaña decisiones.</small>
+      <nav class="foot-links">
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    // Verificar autenticación
+    function checkAuth() {
+      const currentUser = sessionStorage.getItem('currentUser');
+      if (!currentUser) {
+        window.location.href = 'login.html';
+        return null;
+      }
+      return JSON.parse(currentUser);
+    }
+
+    // Cargar información del usuario
+    function loadUserInfo() {
+      const user = checkAuth();
+      if (!user) return;
+
+      // Cargar foto de perfil si existe
+      const profilePic = localStorage.getItem(`profilePic_${user.email}`);
+      const avatarLarge = document.getElementById('profileAvatarLarge');
+      
+      if (profilePic) {
+        avatarLarge.innerHTML = `<img src="${profilePic}" alt="Foto de perfil"><div class="avatar-upload-overlay">📷 Cambiar foto</div>`;
+      } else {
+        avatarLarge.innerHTML = `${user.username.charAt(0).toUpperCase()}<div class="avatar-upload-overlay">📷 Cambiar foto</div>`;
+      }
+
+      document.getElementById('profileName').textContent = user.username;
+      document.getElementById('profileEmail').textContent = user.email;
+
+      updateNavMenu(user);
+    }
+
+    // Actualizar menú de navegación
+    function updateNavMenu(user) {
+      const authArea = document.getElementById('authArea');
+      const profilePic = localStorage.getItem(`profilePic_${user.email}`);
+      
+      const avatarContent = profilePic 
+        ? `<img src="${profilePic}" alt="${user.username}">`
+        : user.username.charAt(0).toUpperCase();
+
+      authArea.innerHTML = `
+        <div class="user-menu">
+          <button class="user-button" id="userMenuBtn">
+            <div class="user-avatar">${avatarContent}</div>
+            <span>${user.username}</span>
+          </button>
+          <div class="dropdown-menu" id="userDropdown">
+            <a href="perfil.html" class="dropdown-item">Mi perfil</a>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="logoutBtn">Cerrar sesión</button>
+          </div>
+        </div>
+      `;
+
+      const menuBtn = document.getElementById('userMenuBtn');
+      const dropdown = document.getElementById('userDropdown');
+
+      menuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function() {
+        dropdown.classList.remove('show');
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        sessionStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      });
+    }
+
+    // Obtener reuniones del usuario
+    function getUserMeetings() {
+      const meetings = localStorage.getItem('userMeetings');
+      return meetings ? JSON.parse(meetings) : [];
+    }
+
+    // Cargar reuniones
+    function loadMeetings() {
+      const user = checkAuth();
+      if (!user) return;
+
+      const meetings = getUserMeetings().filter(m => m.userEmail === user.email);
+      const meetingsList = document.getElementById('meetingsList');
+
+      document.getElementById('statMeetings').textContent = meetings.length;
+      document.getElementById('statCompleted').textContent = meetings.filter(m => m.status === 'completed').length;
+
+      if (meetings.length === 0) {
+        meetingsList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📅</div>
+            <h3>No tienes reuniones programadas</h3>
+            <p>Agenda tu primera sesión con un mentor universitario</p>
+            <a href="index.html#agenda" class="btn btn-primary" style="margin-top: 1rem;">Reservar sesión</a>
+          </div>
+        `;
+        return;
+      }
+
+      meetingsList.innerHTML = meetings.map(meeting => {
+        const meetingDate = new Date(meeting.date);
+        const isUpcoming = meetingDate > new Date();
+        const status = meeting.status || (isUpcoming ? 'confirmed' : 'completed');
+        
+        return `
+          <div class="meeting-card">
+            <div class="meeting-header">
+              <div>
+                <h3 class="meeting-title">${meeting.area}</h3>
+                <span class="meeting-status status-${status === 'confirmed' ? 'confirmed' : 'pending'}">
+                  ${status === 'confirmed' ? '✓ Confirmada' : '⏳ Pendiente'}
+                </span>
+              </div>
+            </div>
+            
+            <div class="meeting-details">
+              <div class="detail-item">
+                <span class="detail-icon">📅</span>
+                <span>${meetingDate.toLocaleDateString('es-PE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">⏰</span>
+                <span>${meeting.time || '10:00 AM'}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-icon">👨‍🎓</span>
+                <span>Mentor asignado</span>
+              </div>
+            </div>
+
+            ${isUpcoming ? `
+              <div class="meeting-actions">
+                <button class="btn-small btn-join" onclick="joinMeeting('${meeting.id}')">🎥 Unirse a la reunión</button>
+                <button class="btn-small btn-reschedule" onclick="rescheduleMeeting('${meeting.id}')">📅 Reagendar</button>
+                <button class="btn-small btn-cancel" onclick="cancelMeeting('${meeting.id}')">❌ Cancelar</button>
+              </div>
+            ` : `
+              <div class="meeting-actions">
+                <button class="btn-small" style="background: #6c757d; color: white;">Reunión completada</button>
+              </div>
+            `}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Generar calendario
+    function generateCalendar() {
+      const user = checkAuth();
+      if (!user) return;
+
+      const meetings = getUserMeetings().filter(m => m.userEmail === user.email);
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const prevLastDay = new Date(currentYear, currentMonth, 0);
+      
+      const firstDayWeek = firstDay.getDay();
+      const lastDayDate = lastDay.getDate();
+      const prevLastDayDate = prevLastDay.getDate();
+
+      const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      
+      document.getElementById('currentMonthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      let days = '';
+      const today = new Date();
+
+      // Días del mes anterior
+      for (let i = firstDayWeek; i > 0; i--) {
+        days += `<div class="calendar-day other-month">${prevLastDayDate - i + 1}</div>`;
+      }
+
+      // Días del mes actual
+      for (let i = 1; i <= lastDayDate; i++) {
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const hasMeeting = meetings.some(m => m.date === dateStr);
+        const isToday = today.getDate() === i && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+        
+        let classes = 'calendar-day';
+        if (isToday) classes += ' today';
+        if (hasMeeting) classes += ' has-meeting';
+        
+        days += `<div class="${classes}">${i}</div>`;
+      }
+
+      // Días del siguiente mes
+      const remainingDays = 42 - (firstDayWeek + lastDayDate);
+      for (let i = 1; i <= remainingDays; i++) {
+        days += `<div class="calendar-day other-month">${i}</div>`;
+      }
+
+      document.getElementById('calendarGrid').innerHTML = days;
+
+      // Próximas reuniones
+      const upcomingMeetings = meetings
+        .filter(m => new Date(m.date) >= today)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 5);
+
+      const upcomingContainer = document.getElementById('upcomingMeetings');
+      
+      if (upcomingMeetings.length === 0) {
+        upcomingContainer.innerHTML = '<p style="color: #999; text-align: center;">No hay reuniones próximas</p>';
+      } else {
+        upcomingContainer.innerHTML = upcomingMeetings.map(meeting => {
+          const date = new Date(meeting.date);
+          const monthShort = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+          
+          return `
+            <div class="meeting-compact">
+              <div class="meeting-compact-date">
+                <span class="day">${date.getDate()}</span>
+                <span class="month">${monthShort[date.getMonth()]}</span>
+              </div>
+              <div class="meeting-compact-info">
+                <div class="title">${meeting.area}</div>
+                <div class="time">${meeting.time || '10:00 AM'}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Funciones de reuniones
+    function joinMeeting(id) {
+      alert('Abriendo sala de videollamada...\n\nEsta función se integrará con tu servicio de videollamadas.');
+    }
+
+    function rescheduleMeeting(id) {
+      if (confirm('¿Deseas reagendar esta reunión?')) {
+        alert('Función de reagendado próximamente');
+      }
+    }
+
+    function cancelMeeting(id) {
+      if (confirm('¿Estás seguro de que deseas cancelar esta reunión?')) {
+        let meetings = getUserMeetings();
+        meetings = meetings.filter(m => m.id !== id);
+        localStorage.setItem('userMeetings', JSON.stringify(meetings));
+        loadMeetings();
+        generateCalendar();
+        alert('Reunión cancelada exitosamente');
+      }
+    }
+
+    // Manejo de tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        document.getElementById('meetingsTab').style.display = tabName === 'meetings' ? 'block' : 'none';
+        document.getElementById('calendarTab').style.display = tabName === 'calendar' ? 'block' : 'none';
+        
+        if (tabName === 'calendar') {
+          generateCalendar();
+        }
+      });
+    });
+
+    // Navegación del calendario
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'prevMonth') {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        generateCalendar();
+      }
+      
+      if (e.target.id === 'nextMonth') {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        generateCalendar();
+      }
+    });
+
+    // Inicializar
+    window.addEventListener('DOMContentLoaded', function() {
+      loadUserInfo();
+      loadMeetings();
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Hacer el avatar clickeable para subir foto
+      document.getElementById('profileAvatarLarge').addEventListener('click', function() {
+        document.getElementById('avatarInput').click();
+      });
+
+      // Manejar cambio de foto de perfil
+      document.getElementById('avatarInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validar tipo de archivo
+        if (!file.type.startsWith('image/')) {
+          alert('Por favor selecciona un archivo de imagen válido');
+          return;
+        }
+
+        // Validar tamaño (máximo 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('La imagen es demasiado grande. Máximo 5MB');
+          return;
+        }
+
+        // Leer y guardar la imagen
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const user = JSON.parse(sessionStorage.getItem('currentUser'));
+          const imageData = event.target.result;
+          
+          // Guardar en localStorage
+          localStorage.setItem(`profilePic_${user.email}`, imageData);
+          
+          // Actualizar UI inmediatamente
+          loadUserInfo();
+          
+          alert('Foto de perfil actualizada exitosamente');
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  </script>
+</body>
+</html>

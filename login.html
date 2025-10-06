@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" href="styles.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body,
@@ -34,7 +33,6 @@
       max-width: 320px;
     }
 
-    /* Logo arriba a la izquierda */
     .brand {
       position: absolute;
       top: 20px;
@@ -54,18 +52,20 @@
 
     .brand-text {
       font-size: 20px;
+    }
 
-      .register-link {
-        color: #0d6efd;
-        /* color azul Bootstrap */
-        text-decoration: none;
-        font-weight: 500;
-      }
+    .register-link {
+      color: #0d6efd;
+      text-decoration: none;
+      font-weight: 500;
+    }
 
-      .register-link:hover {
-        text-decoration: underline;
-      }
+    .register-link:hover {
+      text-decoration: underline;
+    }
 
+    .alert {
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -74,7 +74,7 @@
   <div class="container-fluid h-100">
     <div class="row h-100">
 
-      <!-- Lado Izquierdo: Login más pequeño -->
+      <!-- Lado Izquierdo: Login -->
       <div class="col-md-4 split-left">
 
         <!-- Logo fijo en esquina superior izquierda -->
@@ -85,27 +85,108 @@
 
         <div class="login-box">
           <h2 class="mb-4 text-center">Iniciar Sesión</h2>
-          <form>
+          <form id="loginForm">
             <div class="mb-3">
-              <label for="username" class="form-label">Usuario</label>
-              <input type="text" class="form-control" id="username" placeholder="Ingrese su usuario">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="email" placeholder="Ingrese su correo" required>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Contraseña</label>
-              <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña">
+              <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Iniciar Sesion</button>
+            <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
             <div class="text-center mt-3">
-              <a href="register.html" class="register-link">Registrate aqui!!</a>
+              <a href="register.html" class="register-link">¡Regístrate aquí!</a>
             </div>
           </form>
+          <div id="messageArea"></div>
         </div>
       </div>
 
-      <!-- Lado Derecho: Imagen más grande -->
+      <!-- Lado Derecho: Imagen -->
       <div class="col-md-8 split-right d-none d-md-block"></div>
     </div>
   </div>
+
+  <script>
+    // Funciones para manejar usuarios en localStorage
+    function getUsers() {
+      const users = localStorage.getItem('rumbiaUsers');
+      return users ? JSON.parse(users) : [];
+    }
+
+    // Función para mostrar mensajes
+    function showMessage(message, type) {
+      const messageArea = document.getElementById('messageArea');
+      messageArea.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+    }
+
+    // Función para validar credenciales
+    function validateLogin(email, password) {
+      const users = getUsers();
+      return users.find(user => 
+        user.email.toLowerCase() === email.toLowerCase() && 
+        user.password === password
+      );
+    }
+
+    // Manejar el envío del formulario
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Validar campos vacíos
+      if (!email || !password) {
+        showMessage('Por favor, complete todos los campos.', 'warning');
+        return;
+      }
+
+      // Validar credenciales
+      const user = validateLogin(email, password);
+
+      if (user) {
+        // Login exitoso
+        showMessage(`¡Bienvenido, ${user.username}! Redirigiendo...`, 'success');
+        
+        // Guardar sesión del usuario
+        sessionStorage.setItem('currentUser', JSON.stringify({
+          id: user.id,
+          username: user.username,
+          email: user.email
+        }));
+
+        // Redirigir a index.html después de 1.5 segundos
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      } else {
+        // Credenciales incorrectas
+        showMessage('Correo o contraseña incorrectos. Por favor, intente nuevamente.', 'danger');
+        document.getElementById('password').value = '';
+      }
+    });
+
+    // Verificar si ya hay una sesión activa al cargar la página
+    window.addEventListener('DOMContentLoaded', function() {
+      const currentUser = sessionStorage.getItem('currentUser');
+      if (currentUser) {
+        const user = JSON.parse(currentUser);
+        showMessage(`Ya has iniciado sesión como ${user.username}. Redirigiendo...`, 'info');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1500);
+      }
+    });
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
